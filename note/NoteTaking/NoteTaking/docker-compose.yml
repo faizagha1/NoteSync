@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3307:3306" # Expose MySQL on port 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  
+      MYSQL_DATABASE: note_taking       # Initial database name
+      MYSQL_USER: note                  # Application-specific user
+      MYSQL_PASSWORD: note      # Password for the user
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  maildev:
+    image: maildev/maildev:latest
+    container_name: maildev
+    ports:
+      - "1080:1080"   # Web UI exposed on port 1080
+      - "1025:1025"   # SMTP server for sending emails
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
